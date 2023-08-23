@@ -2,3 +2,4 @@ flask
 flasgger
 flask_marshmallow
 flask-socketio
+pymongo

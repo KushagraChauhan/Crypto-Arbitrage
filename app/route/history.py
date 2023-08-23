@@ -4,8 +4,10 @@ from app.helpers.utils import requires_auth
 
 bp = Blueprint('api', __name__)
 
-@bp.route('/api/history', methods=['GET'])
+@bp.route('/', methods=['GET'])
 
+## This Blueprint requires the basic auth defined in the utils module
+## Shows all the historical data that has been stored in the DB
 @requires_auth
 def get_trades():
     trades = Trade.objects.all()

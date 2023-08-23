@@ -15,55 +15,79 @@
         transports: ['websocket'],
       });
       
+        //When connection has been made
         socket.on('connect', function() {
             console.log('Connected to WebSocket');
         });
 
+        //When the user presses the the button with id='binance_to_kraken'
         function setThresholdBK() {
             var threshold_bk = parseFloat(document.getElementById('binance_to_kraken').value);
-            // socket.emit('set_threshold', { threshold: threshold });
             console.log(threshold_bk)
             socket.emit('set_threshold_bk', threshold_bk)
         }
 
+        //When the user presses the the button with id='kraken_to_binance'
         function setThresholdKB() {
             var threshold_kb = parseFloat(document.getElementById('kraken_to_binance').value);
-            // socket.emit('set_threshold', { threshold: threshold });
             console.log(threshold_kb)
             socket.emit('set_threshold_kb', threshold_kb)
         }
 
+        // Display arbitrage opportunity information to the user
         socket.on('arbitrage_opportunity', function(data) {
             console.log('Arbitrage Opportunity:', data);
             var jsonObject = JSON.parse(data.trade);
             var profitObject = jsonObject.profit;
             var exchangeObject = jsonObject.exchanges;
-            $('#log').append('Profit is:');
-            $('#log').append('<br>' + $('<div/>').text(profitObject).html());
-            $('#log').append('<br>'+'Exchange is:');
-            $('#log').append('<br>' + $('<div/>').text(exchangeObject[0]).html());
-            
-            // // Display arbitrage opportunity information to the user
+            $('#log_success').append('<br><br>'+'Profit is:');
+            $('#log_success').append('<br>' + $('<div/>').text(profitObject).html());
+            $('#log_success').append('<br>'+'Exchange is between:');
+            $('#log_success').append('<br>' + $('<div/>').text(exchangeObject[0]).html());
+            $('#log_success').append(' To ');
+            $('#log_success').append($('<div/>').text(exchangeObject[1]).html());            
+        });
+
+        // Display no arbitrage opportunity information to the user
+        socket.on('no_opportunity', function(data) {
+            console.log('No Arbitrage Opportunity');
+            var jsonObject = JSON.parse(data.trade);
+            var profitObject = jsonObject.profit;
+            var exchangeObject = jsonObject.exchanges;
+            $('#log_failure').append('<br><br>');
+            $('#log_failure').append('<br>' + $('<div/>').text(profitObject).html());
+            $('#log_failure').append('<br>'+'Exchange is between:');
+            $('#log_failure').append('<br>' + $('<div/>').text(exchangeObject[0]).html());
+            $('#log_failure').append(' To ');
+            $('#log_failure').append($('<div/>').text(exchangeObject[1]).html());
         });
     </script>
 </head>
-<body>
-    <h1>Crypto Arbitrage</h1>
-    <div clas="d-flex justify-content-center">
-    <h2>Binance to Kraken</h2>
-    <label for="threshold_bk">Threshold:</label>
-    <input type="number" id="binance_to_kraken" step="0.01" value="0.5">
-    <button onclick="setThresholdBK()" class="btn btn-primary">Set Threshold</button>
-    
-    <h2>Kraken to Binance</h2>
-    <label for="threshold_kb">Threshold:</label>
-    <input type="number" id="kraken_to_binance" step="0.01" value="0.5">
-    <button onclick="setThresholdKB()" class="btn btn-primary">Set Threshold</button>
-    <br>
-    <br>
-    <br>
-    <div id="log"></div>
 
+<body>
+    <div class="text-center">
+        <h1 class="mx-auto">Crypto Arbitrage</h1>
+    </div>
+    
+
+    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div>
+            <h2>Binance to Kraken</h2>
+            <label for="threshold_bk">Threshold:</label>
+            <input type="number" id="binance_to_kraken" step="0.01" value="0.5">
+            <button onclick="setThresholdBK()" class="btn btn-primary">Set Threshold</button>
+            
+            <h2>Kraken to Binance</h2>
+            <label for="threshold_kb">Threshold:</label>
+            <input type="number" id="kraken_to_binance" step="0.01" value="0.5">
+            <button onclick="setThresholdKB()" class="btn btn-primary">Set Threshold</button>
+            
+            <br>
+            <!--Show the arbitrage opportunity in green to the user if it is found-->
+            <div id="log_success" class="text-success"></div>
+            <!--Show the arbitrage opportunity in red to the user if it is not found-->
+            <div id="log_failure" class="text-danger"></div>
+        
     </div>
 
 </body>

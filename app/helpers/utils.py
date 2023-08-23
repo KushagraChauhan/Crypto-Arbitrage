@@ -1,6 +1,7 @@
 from functools import wraps
 from flask import request, g, abort
 
+## Helper method to incorporate basic auth in the history REST API
 def requires_auth(func):
     @wraps(func)
     def decorated(*args, **kwargs):

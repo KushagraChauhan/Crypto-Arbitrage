@@ -50,6 +50,8 @@ def isArbitagePossible(threshold, exchange):
     arbitrage_value = arbitrage_value_gen(exchange)
     if threshold < arbitrage_value:
         return True
+    elif float(arbitrage_value)==0.0:
+        return "Not Possible"
     else:
         return False
 
