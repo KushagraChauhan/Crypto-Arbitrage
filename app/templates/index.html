@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Arbitrage-Test</title>
+    <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+           setInterval(function(){
+           $.ajax({
+                    type: 'GET',
+                    url: '/api/', // Endpoint to fetch the API value
+                    success: function(apiValue) {
+                         $('#api_result').text('The value is:'+apiValue);
+
+                    },
+                    error: function() {
+
+                    }
+                });
+           },7000)
+            $('#emit').submit(function(event) {
+                event.preventDefault();
+                var customValue = parseFloat($('#emit_data').val()); // Get the custom value from the input
+                if (isNaN(customValue)) {
+                    alert('Please enter a valid number');
+                    return;
+                }
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/', // Endpoint to fetch the API value
+                    success: function(apiValue) {
+                         $('#api_result').text('The value is:'+apiValue);
+                        if (customValue > apiValue) {
+                            $('#log').text('No'); // Compare and display the result
+                        } else {
+                            $('#log').text('Yes');
+                        }
+                    },
+                    error: function() {
+                        alert('Failed to fetch API value');
+                    }
+                });
+            });
+        });
+    </script>
+
+</head>
+<body style="background-color:white;">
+
+    <h1 style="background-color:white;">Socket</h1>
+    <form id="emit" method="POST" action='#'>
+        <input type="text" name="emit_data" id="emit_data" placeholder="Message">
+        <input type="button"  value="Set Threshold">
+        <input type="submit"  value="Perform arbitrage">
+    </form>
+   
+
+    <form id="disconnect" method="POST" action="#">
+        <input type="submit" value="Disconnect Server">
+    </form>
+    <h2 style="background-color:white;">Logs</h2>
+    <div id="api_result" ></div>
+    <div id="log" ></div>
+</body>
+</html>
