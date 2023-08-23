@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Crypto Arbitrage</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script type="text/javascript">
        var socket = io.connect(null, {
@@ -15,23 +16,45 @@
             console.log('Connected to WebSocket');
         });
 
-        function setThreshold() {
-            var threshold = parseFloat(document.getElementById('threshold').value);
+        function setThresholdBK() {
+            var threshold_bk = parseFloat(document.getElementById('binance_to_kraken').value);
             // socket.emit('set_threshold', { threshold: threshold });
-            console.log(threshold)
-            socket.emit('set_threshold', threshold)
+            console.log(threshold_bk)
+            socket.emit('set_threshold_bk', threshold_bk)
+        }
+
+        function setThresholdKB() {
+            var threshold_kb = parseFloat(document.getElementById('kraken_to_binance').value);
+            // socket.emit('set_threshold', { threshold: threshold });
+            console.log(threshold_kb)
+            socket.emit('set_threshold_kb', threshold_kb)
         }
 
         socket.on('arbitrage_opportunity', function(data) {
             console.log('Arbitrage Opportunity:', data);
-            // Display arbitrage opportunity information to the user
+            var jsonObject = JSON.parse(data.trade);
+            var profitObject = jsonObject.profit;
+            $('#log').append('Profit is:');
+             $('#log').append('<br>' + $('<div/>').text(profitObject).html());
+            // // Display arbitrage opportunity information to the user
         });
     </script>
 </head>
 <body>
     <h1>Crypto Arbitrage</h1>
-    <label for="threshold">Threshold:</label>
-    <input type="number" id="threshold" step="0.01" value="0.5">
-    <button onclick="setThreshold()">Set Threshold</button>
+    <h2>Binance to Kraken</h2>
+    <label for="threshold_bk">Threshold:</label>
+    <input type="number" id="binance_to_kraken" step="0.01" value="0.5">
+    <button onclick="setThresholdBK()">Set Threshold</button>
+    
+    <h2>Kraken to Binance</h2>
+    <label for="threshold_kb">Threshold:</label>
+    <input type="number" id="kraken_to_binance" step="0.01" value="0.5">
+    <button onclick="setThresholdKB()">Set Threshold</button>
+    <br>
+    <br>
+    <br>
+    <div id="log"></div>
+
 </body>
 </html>
