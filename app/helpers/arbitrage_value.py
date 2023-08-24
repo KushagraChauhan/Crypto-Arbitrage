@@ -3,8 +3,17 @@ import requests
 from config import logger
 from instance import secret_keys
 
-
+## This is the helper method to generate the arbitrage_value from the CMC APIs
 def arbitrage_value_gen(exchange):
+    """
+    Calculate the arbitrage_value from the CMC APIs.
+    
+    :param exchange: The name of the exchange from which to perform arbitrage.
+    :type exchange: string
+    :return: The arbitrage_value which is the difference between the price of the two the exchanges
+    :rtype: int or float
+    """
+
      # CoinMarketCap API endpoint for getting the price of BTC on Binance
     CMC_URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=BTC"
     # CoinMarketCap API Key
@@ -46,16 +55,36 @@ def arbitrage_value_gen(exchange):
 
     return arbitrage_value
 
+
+## This is the helper method that checks whether an arbitrage is possible or not against the given threshold
 def isArbitagePossible(threshold, exchange):
+    """
+    Check whether an arbitrage is possible or not against the given threshold
+    
+    :param exchange: The name of the exchange from which to perform arbitrage.
+    :param threshold: The input given by the user to check
+    :type exchange: string
+    :type threshold: int or float
+    :return: True/False based on the calculations
+    :rtype: Boolean or string
+    """
+
     arbitrage_value = arbitrage_value_gen(exchange)
     if threshold < arbitrage_value:
         return True
-    elif float(arbitrage_value)==0.0:
-        return "Not Possible"
     else:
         return False
 
+## This is the helper method that returns the profit which is equal to the arbitrage value if arbitrage is possible
 def arbitagePossible(exchange):
+    """
+    Return the profit which is equal to the arbitrage value if arbitrage is possible
+    
+    :param exchange: The name of the exchange from which to perform arbitrage.
+    :type exchange: string
+    :return: The amount of profit possible
+    :rtype: int or float
+    """
     if isArbitagePossible:
         profit = arbitrage_value_gen(exchange)
         return profit

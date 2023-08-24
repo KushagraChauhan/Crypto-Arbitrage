@@ -3,6 +3,11 @@ from mongoengine import Document, ListField, StringField, FloatField, DateTimeFi
 
 ## Model for the DB
 class Trade(Document):
+    """
+    Model for the DB
+    
+    :param Document: Document is likely referring to a class or base class that represents a document in a MongoDB database using an Object-Document Mapping (ODM) framework.  
+    """
     asset = StringField()
     exchanges = ListField()
     profit = FloatField()

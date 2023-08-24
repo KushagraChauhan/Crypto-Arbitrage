@@ -3,3 +3,5 @@ flasgger
 flask_marshmallow
 flask-socketio
 pymongo
+mongoengine
+flask_restful
