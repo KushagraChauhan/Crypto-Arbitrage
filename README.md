@@ -37,7 +37,7 @@ flask run
 ```
 8. The flask app will be started. There are 2 important api endpoints. 
 - First one is '/home': This is where magic happens. Go to `locahost:5000/home` on your browser. If everything has been installed as per the instructions above, home page will look something like this:
-![home page](https://drive.google.com/file/d/1YViVns0JzKs9i5PYAAecSi5S7aNr-i-G/view)
+![home page](https://user-images.githubusercontent.com/22354159/262962283-b5c14b22-a657-47c7-9c47-52f61f089e5f.png)
 - Second one is '/history': This is to show the historical data which has been stored in the DB. Open postman and go to `localhost:5000/history`. In the auth section, select basic auth and input these credentials. 
 ```
 username: kushagra
